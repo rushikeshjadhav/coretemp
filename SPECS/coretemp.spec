@@ -1,12 +1,14 @@
 %define uname  %{kernel_version}
 %define module_dir updates
 
-Summary: Driver for hello-world
-Name: hello-world
+Summary: Driver for coretemp
+Name: coretemp
 Version: 1.0
 Release: %{?release}%{!?release:1}
 License: GPL
 Source: %{name}-%{version}.tar.gz
+
+Patch0: coretemp-1.0-disable-cpuid-check.patch
 
 BuildRequires: kernel-devel
 Provides: vendor-driver
@@ -15,10 +17,10 @@ Requires(post): /usr/sbin/depmod
 Requires(postun): /usr/sbin/depmod
 
 %description
-hello-world Linux Device Driver source.
+coretemp Linux Device Driver source.
 
 %prep
-%setup -q -n %{name}-%{version}
+%autosetup -p1
 
 %build
 %{__make} -C /lib/modules/%{uname}/build M=$(pwd) modules
@@ -49,5 +51,6 @@ find %{buildroot}/lib/modules/%{uname} -name "*.ko" -type f | xargs chmod u+x
 %doc
 
 %changelog
-* Sat Jan 26 2019 Rushikesh Jadhav <rushikesh7@gmail.com> - 1.0
-- Added example driver hello-world-1.0
+* Wed Dec 4 2019 Rushikesh Jadhav <rushikesh7@gmail.com> - 1.0
+- Added driver coretemp-1.0
+- Removed cpuid checking from driver
